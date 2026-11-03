@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Специалист по ИИ-автоматизации — Telegram-боты для бизнеса</title>
+<meta name="description" content="Я создаю Telegram-ботов, которые помогают бизнесу собирать заявки клиентов, автоматизировать общение и обрабатывать запись на услуги.">
+
+<!-- ============================================================
+  РЕДАКТИРУЕМЫЕ НАСТРОЙКИ
+  Измените значения ниже, чтобы обновить контактные ссылки
+  по всему сайту, не трогая разметку ниже.
+============================================================= -->
+<script>
+  const SITE_CONFIG = {
+    telegramHandle: "@Egor_Verbitskiy",
+    telegramUrl: "https://t.me/Egor_Verbitskiy",
+    email: "lollrider1@gmail.com",
+    bookingBotDemoUrl: "https://t.me/furniture_demo_bot",
+    leadBotDemoUrl: "https://t.me/Demo_Furniture_Bot"
+  };
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:#06070b;
+    --bg-alt:#090a10;
+    --surface:#0e1017;
+    --surface-2:#12141c;
+    --border:#1f222c;
+    --text:#edf1f6;
+    --text-dim:#8d94a3;
+    --text-faint:#575e6c;
+    --blue:#00d4ff;
+    --blue-dim:rgba(0,212,255,.14);
+    --teal:#9d4edd;
+    --teal-dim:rgba(157,78,221,.16);
+    --radius:12px;
+    --maxw:1120px;
+    --font-d:'Space Grotesk',sans-serif;
+    --font-b:'Inter',sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;background:var(--bg);color:var(--text);
+    font-family:var(--font-b);line-height:1.6;font-size:16px;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{font-family:var(--font-d);font-weight:600;line-height:1.15;margin:0;}
+  p{margin:0;color:var(--text-dim);}
+  a{color:inherit;text-decoration:none;}
+  img{max-width:100%;display:block;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;}
+  section{padding:108px 0;border-top:1px solid var(--border);}
+  section:first-of-type{border-top:none;}
+  .eyebrow{font-size:14px;color:var(--text-faint);margin-bottom:14px;}
+  .lede{font-size:18px;color:var(--text-dim);max-width:620px;margin-top:16px;}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;padding:13px 24px;
+    border-radius:8px;font-weight:500;font-size:15px;border:1px solid transparent;
+    cursor:pointer;transition:transform .15s ease, border-color .15s ease, background .15s ease;
+  }
+  .btn-primary{background:var(--blue);color:#041822;}
+  .btn-primary:hover{transform:translateY(-1px);background:#4de2ff;}
+  .btn-ghost{border-color:var(--border);color:var(--text);}
+  button.btn{background:transparent;font-family:inherit;margin:0;appearance:none;-webkit-appearance:none;}
+  .btn-ghost:hover{border-color:var(--text-faint);}
+  .btn-teal{background:var(--teal);color:#1a0e2e;}
+  .btn-teal:hover{transform:translateY(-1px);background:#b47eec;}
+
+  header{
+    position:sticky;top:0;z-index:50;background:rgba(10,14,20,.85);
+    backdrop-filter:blur(10px);border-bottom:1px solid var(--border);
+  }
+  nav{display:flex;align-items:center;justify-content:space-between;padding:18px 28px;max-width:var(--maxw);margin:0 auto;}
+  .brand{font-family:var(--font-d);font-weight:600;font-size:17px;}
+  .brand span{color:var(--blue);}
+  .navlinks{display:flex;gap:30px;align-items:center;}
+  .navlinks a{font-size:14.5px;color:var(--text-dim);transition:color .15s;}
+  .navlinks a:hover{color:var(--text);}
+  .nav-toggle{display:none;background:none;border:none;color:var(--text);font-size:24px;cursor:pointer;}
+  @media (max-width:860px){
+    .navlinks{position:fixed;top:64px;left:0;right:0;background:var(--bg-alt);flex-direction:column;
+      padding:20px 28px;gap:18px;border-bottom:1px solid var(--border);display:none;}
+    .navlinks.open{display:flex;}
+    .nav-toggle{display:block;}
+  }
+
+  .hero{padding-top:92px;}
+  .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:60px;align-items:center;}
+  .hero h1{font-size:clamp(32px,4.4vw,52px);letter-spacing:-.01em;}
+  .hero-ctas{display:flex;gap:14px;margin-top:36px;flex-wrap:wrap;}
+  @media (max-width:900px){.hero-grid{grid-template-columns:1fr;}}
+
+  .hero-visual{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:22px;}
+  .hv-chat{background:var(--bg-alt);border-radius:10px;padding:16px;font-size:13.5px;}
+  .bubble{max-width:80%;padding:9px 13px;border-radius:9px;margin-bottom:9px;font-size:13.5px;}
+  .bubble.in{background:var(--surface-2);color:var(--text-dim);}
+  .bubble.out{background:var(--blue-dim);color:var(--text);margin-left:auto;}
+  .hv-flow{display:flex;align-items:center;justify-content:space-between;margin-top:18px;padding-top:18px;border-top:1px dashed var(--border);}
+  .hv-node{text-align:center;font-size:11px;color:var(--text-faint);}
+  .hv-node .dot{width:34px;height:34px;border-radius:9px;background:var(--surface-2);border:1px solid var(--border);
+    display:flex;align-items:center;justify-content:center;margin:0 auto 6px;color:var(--teal);font-size:15px;}
+  .hv-arrow{color:var(--text-faint);font-size:14px;}
+
+  .problem-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);
+    border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-top:48px;}
+  .problem-card{background:var(--bg);padding:28px 22px;}
+  .problem-card h3{font-size:16.5px;margin-bottom:10px;}
+  .problem-card p{font-size:14.5px;}
+  @media (max-width:900px){.problem-grid{grid-template-columns:1fr 1fr;}}
+  @media (max-width:560px){.problem-grid{grid-template-columns:1fr;}}
+
+  .project{position:relative;}
+  .project.p1{--accent:var(--blue);--accent-dim:var(--blue-dim);}
+  .project.p2{--accent:var(--teal);--accent-dim:var(--teal-dim);}
+  .project-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:10px;}
+  .project-tag{font-size:13px;color:var(--accent);font-weight:600;letter-spacing:.02em;}
+  .project-industry{font-size:14px;color:var(--text-faint);}
+  .demo-badge{display:inline-block;font-size:12px;color:var(--text-faint);border:1px solid var(--border);
+    padding:5px 11px;border-radius:999px;margin-top:14px;}
+  .project h2{font-size:clamp(24px,2.8vw,34px);margin-top:14px;max-width:720px;}
+  .project-cols{display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:44px;}
+  @media (max-width:900px){.project-cols{grid-template-columns:1fr;}}
+  .project h4{font-size:13.5px;color:var(--text-faint);margin-bottom:10px;}
+  .feature-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:11px;}
+  .feature-list li{padding-left:20px;position:relative;font-size:15px;color:var(--text-dim);}
+  .feature-list li::before{content:"";position:absolute;left:0;top:9px;width:6px;height:6px;border-radius:50%;background:var(--accent);}
+  .journey{counter-reset:step;margin-top:18px;}
+  .journey li{list-style:none;counter-increment:step;padding-left:34px;position:relative;padding-bottom:18px;font-size:15px;color:var(--text-dim);}
+  .journey li::before{content:counter(step);position:absolute;left:0;top:-1px;width:22px;height:22px;border-radius:6px;
+    background:var(--accent-dim);color:var(--accent);font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;font-family:var(--font-d);}
+  .journey li:not(:last-child)::after{content:"";position:absolute;left:11px;top:22px;bottom:0;width:1px;background:var(--border);}
+
+  .diagram{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:26px;margin-top:52px;}
+  .diagram-note{font-size:12.5px;color:var(--text-faint);margin-top:14px;}
+
+  .cal-row{display:flex;gap:16px;align-items:stretch;flex-wrap:wrap;}
+  .cal-card{flex:1;min-width:190px;background:var(--bg-alt);border-radius:10px;padding:16px;border:1px solid var(--border);}
+  .cal-card h5{font-family:var(--font-d);font-size:13px;margin:0 0 10px;color:var(--text-faint);}
+  .slot{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-radius:6px;margin-bottom:6px;font-size:13px;}
+  .slot.busy{background:rgba(255,99,99,.1);color:#ff8f8f;}
+  .slot.free{background:var(--teal-dim);color:var(--teal);}
+  .cal-arrow{align-self:center;font-size:20px;color:var(--text-faint);}
+  @media (max-width:700px){.cal-row{flex-direction:column;}.cal-arrow{transform:rotate(90deg);}}
+
+  .flow-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+  .flow-box{flex:1;min-width:170px;background:var(--bg-alt);border:1px solid var(--border);border-radius:10px;padding:16px;}
+  .flow-box h5{font-size:13px;color:var(--text-faint);margin:0 0 8px;font-family:var(--font-d);}
+  .flow-box .mini{font-size:12.5px;color:var(--text-dim);}
+  .sheet-row{display:flex;gap:6px;font-size:11.5px;padding:6px 0;border-bottom:1px solid var(--border);color:var(--text-dim);}
+  .sheet-row span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .sheet-row .link{color:var(--teal);}
+
+  .gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:20px;}
+  .shot{aspect-ratio:9/16;border:1.5px dashed var(--border);border-radius:10px;display:flex;align-items:center;
+    justify-content:center;text-align:center;padding:10px;font-size:12px;color:var(--text-faint);background:var(--bg-alt);}
+  @media (max-width:700px){.gallery{grid-template-columns:repeat(2,1fr);}}
+
+  .placeholder-block{border:1.5px dashed var(--border);border-radius:10px;padding:34px 18px;text-align:center;
+    color:var(--text-faint);font-size:13px;background:var(--bg-alt);margin-top:16px;}
+
+  .compare-table{width:100%;border-collapse:collapse;margin-top:44px;font-size:14.5px;}
+  .compare-table th,.compare-table td{text-align:left;padding:16px 18px;border-bottom:1px solid var(--border);vertical-align:top;}
+  .compare-table th{font-family:var(--font-d);font-weight:600;color:var(--text-faint);font-size:12.5px;}
+  .compare-table td:first-child{color:var(--text-faint);width:190px;font-size:13px;}
+  .compare-table td:not(:first-child){color:var(--text-dim);}
+  .compare-table thead th:nth-child(2){color:var(--blue);}
+  .compare-table thead th:nth-child(3){color:var(--teal);}
+  .compare-wrap{overflow-x:auto;}
+
+  .service-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:44px;}
+  .service-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:26px;transition:border-color .15s;}
+  .service-card:hover{border-color:var(--text-faint);}
+  .service-card .ic{width:36px;height:36px;border-radius:9px;background:var(--blue-dim);color:var(--blue);
+    display:flex;align-items:center;justify-content:center;margin-bottom:16px;font-size:17px;}
+  .service-card h3{font-size:16.5px;margin-bottom:9px;}
+  .service-card p{font-size:14px;}
+  @media (max-width:900px){.service-grid{grid-template-columns:1fr 1fr;}}
+  @media (max-width:560px){.service-grid{grid-template-columns:1fr;}}
+
+  .process-list{margin-top:48px;display:flex;flex-direction:column;}
+  .process-item{display:grid;grid-template-columns:70px 1fr;gap:22px;padding:24px 0;border-top:1px solid var(--border);}
+  .process-item:first-child{border-top:none;}
+  .process-num{font-family:var(--font-d);font-size:26px;color:var(--text-faint);}
+  .process-item h3{font-size:17px;margin-bottom:7px;}
+  .process-item p{font-size:14.5px;max-width:560px;}
+
+  .deliver-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:44px;}
+  @media (max-width:800px){.deliver-grid{grid-template-columns:1fr;}}
+
+  .faq{margin-top:44px;border-top:1px solid var(--border);}
+  .faq-item{border-bottom:1px solid var(--border);}
+  .faq-q{display:flex;justify-content:space-between;align-items:center;padding:22px 0;cursor:pointer;font-size:16px;font-weight:500;}
+  .faq-q .x{color:var(--text-faint);font-size:20px;transition:transform .2s;}
+  .faq-item.open .x{transform:rotate(45deg);}
+  .faq-a{max-height:0;overflow:hidden;transition:max-height .25s ease;}
+  .faq-a p{padding-bottom:22px;font-size:14.5px;max-width:680px;}
+  .faq-item.open .faq-a{max-height:220px;}
+
+  .contact{text-align:left;}
+  .contact h2{font-size:clamp(26px,3.6vw,40px);max-width:640px;}
+  .contact-ctas{display:flex;gap:14px;margin-top:34px;flex-wrap:wrap;}
+  .contact-meta{margin-top:30px;font-size:14px;color:var(--text-faint);}
+
+  footer{padding:36px 0;text-align:center;font-size:13px;color:var(--text-faint);border-top:1px solid var(--border);}
+
+  /* ---------- Лёгкие анимации ---------- */
+  .reveal{opacity:0;transform:translateY(16px);transition:opacity .7s ease, transform .7s ease;}
+  .reveal.visible{opacity:1;transform:translateY(0);}
+
+  .bubble{opacity:0;transform:translateY(8px);animation:bubbleIn .5s ease forwards;}
+  .bubble:nth-child(1){animation-delay:.2s;}
+  .bubble:nth-child(2){animation-delay:.55s;}
+  .bubble:nth-child(3){animation-delay:.9s;}
+  @keyframes bubbleIn{to{opacity:1;transform:translateY(0);}}
+
+  .shot{overflow:hidden;}
+  .shot img{transition:transform .4s ease;}
+  .shot:hover img{transform:scale(1.035);}
+
+  .service-card{transition:border-color .2s ease, transform .3s ease, box-shadow .3s ease;}
+  .service-card:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(0,0,0,.35);}
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="brand">Egor.<span>Node</span>.bot</div>
+    <button class="nav-toggle" id="navToggle" aria-label="Меню">☰</button>
+    <div class="navlinks" id="navLinks">
+      <a href="#projects">Проекты</a>
+      <a href="#services">Услуги</a>
+      <a href="#process">Как я работаю</a>
+      <a href="#faq">Вопросы</a>
+      <a href="#contact" class="btn btn-primary" style="padding:9px 18px;">Написать мне</a>
+    </div>
+  </nav>
+</header>
+
+<!-- ================= ГЕРОЙ-БЛОК ================= -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">Специалист по ИИ-автоматизации · Telegram-боты для бизнеса</div>
+      <h1>Автоматизируйте бизнес. Перестаньте терять ценные заявки.</h1>
+      <p class="lede">Я создаю Telegram-ботов, которые помогают бизнесу обрабатывать обращения клиентов, автоматизировать запись на услуги и систематизировать входящие заявки.</p>
+      <div class="hero-ctas">
+        <a href="#projects" class="btn btn-primary">Смотреть проекты</a>
+        <a href="#contact" class="btn btn-ghost">Обсудить автоматизацию</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hv-chat">
+        <div class="bubble in">Здравствуйте! Хочу записаться на четверг на 15:00.</div>
+        <div class="bubble out">Проверяю доступность на это время…</div>
+        <div class="bubble in">Это время уже занято — может быть, 16:00?</div>
+      </div>
+      <div class="hv-flow">
+        <div class="hv-node"><div class="dot">💬</div>Telegram</div>
+        <div class="hv-arrow">→</div>
+        <div class="hv-node"><div class="dot">⚙️</div>Автоматизация</div>
+        <div class="hv-arrow">→</div>
+        <div class="hv-node"><div class="dot">📅</div>Календарь</div>
+        <div class="hv-arrow">→</div>
+        <div class="hv-node"><div class="dot">✅</div>Подтверждено</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ПРОБЛЕМЫ ================= -->
+<section id="problems">
+  <div class="wrap">
+    <div class="eyebrow">Где бизнес теряет время и заявки</div>
+    <h2 style="font-size:clamp(22px,2.8vw,30px);max-width:640px;">Четыре частые проблемы, которые решает автоматизация</h2>
+    <div class="problem-grid">
+      <div class="problem-card">
+        <h3>Медленные ответы клиентам</h3>
+        <p>Когда ответ зависит от того, свободен ли человек, клиент ждёт — и часть клиентов просто уходит к другим.</p>
+      </div>
+      <div class="problem-card">
+        <h3>Повторяющиеся вопросы клиентов</h3>
+        <p>Одни и те же вопросы о цене, свободном времени и процессе приходится печатать снова и снова — вместо того чтобы заниматься делом.</p>
+      </div>
+      <div class="problem-card">
+        <h3>Разрозненные заявки</h3>
+        <p>Заявки приходят из разных чатов, звонков и сообщений, и детали о том, что нужно клиенту, теряются или разбросаны по разным местам.</p>
+      </div>
+      <div class="problem-card">
+        <h3>Ручная запись на приём</h3>
+        <p>Проверка календаря и переписка ради согласования времени — небольшая задача, которая отнимает много времени при большом потоке клиентов.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ПРОЕКТ 01 ================= -->
+<section id="projects">
+  <div class="wrap project p1">
+    <div class="project-head">
+      <div>
+        <div class="project-tag">Проект 01</div>
+        <div class="project-industry">Салоны красоты и мастера маникюра</div>
+      </div>
+      <span class="demo-badge">Демо-проект — показывает реальный рабочий подход</span>
+    </div>
+    <h2>ИИ-бот для записи на приём</h2>
+    <p class="lede">Telegram-бот, который общается с клиентом о записи, проверяет реальную занятость в Google Calendar и предлагает другое время, если нужный слот уже занят.</p>
+
+    <div class="project-cols">
+      <div>
+        <h4>Проблема бизнеса</h4>
+        <p style="font-size:15px;">Мастер тратит время на ответы клиентам, ручную проверку календаря и согласование записи сообщение за сообщением — время, которое можно было бы потратить на клиентов, которые уже на месте.</p>
+        <h4 style="margin-top:30px;">Решение</h4>
+        <p style="font-size:15px;">Telegram-бот в естественном диалоге выясняет, что нужно клиенту, проверяет подключённый Google Calendar на реальную свободность времени и подводит клиента к подходящему варианту — автоматически предлагая альтернативу, если первый выбор занят.</p>
+        <h4 style="margin-top:30px;">Ключевые функции</h4>
+        <ul class="feature-list">
+          <li>Диалог с клиентом в Telegram</li>
+          <li>Интеграция с Google Calendar для проверки занятости в реальном времени</li>
+          <li>Проверка, действительно ли запрошенное время свободно</li>
+          <li>Предложение альтернативного времени, если слот занят</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Путь клиента</h4>
+        <ul class="journey">
+          <li>Клиент пишет боту в Telegram.</li>
+          <li>Бот помогает клиенту описать, какая запись нужна.</li>
+          <li>Бот сверяет запрошенное время с Google Calendar.</li>
+          <li>Если время занято, бот предлагает альтернативу.</li>
+          <li>Диалог продолжается до момента, когда найдено доступное время — по настроенной логике сценария.</li>
+        </ul>
+        <h4 style="margin-top:14px;">Польза для бизнеса</h4>
+        <p style="font-size:15px;">Меньше переписки о свободном времени вручную, меньше пропущенных заявок вне рабочих часов и календарь, который отражает реальную занятость.</p>
+      </div>
+    </div>
+
+    <div class="diagram">
+      <h4>Проверка доступности — иллюстративный пример</h4>
+      <div class="cal-row">
+        <div class="cal-card">
+          <h5>Запрошенное время</h5>
+          <div class="slot busy">Чт, 15:00 <span>Занято</span></div>
+        </div>
+        <div class="cal-arrow">→</div>
+        <div class="cal-card">
+          <h5>Бот предлагает</h5>
+          <div class="slot free">Чт, 16:00 <span>Свободно</span></div>
+        </div>
+      </div>
+      <div class="diagram-note">Иллюстративный макет логики проверки доступности — не скриншот реального Google Calendar.</div>
+    </div>
+
+    <h4 style="margin-top:56px;">Переписка в Telegram — скриншоты</h4>
+    <div class="gallery">
+      <figure class="shot" style="aspect-ratio:auto;padding:0;margin:0;overflow:hidden;">
+        <img src="booking-telegram-1.jpg" alt="Клиент открывает бота" style="width:100%;display:block;border-radius:10px;">
+      </figure>
+      <figure class="shot" style="aspect-ratio:auto;padding:0;margin:0;overflow:hidden;">
+        <img src="booking-telegram-2.jpg" alt="Бот проверяет и сразу предлагает альтернативу" style="width:100%;display:block;border-radius:10px;">
+      </figure>
+    </div>
+
+    <h4 style="margin-top:40px;">Демо-видео</h4>
+    <video id="bookingVideo" src="booking-demo.mp4" controls preload="metadata" style="display:block;margin:0 auto;width:auto;max-width:100%;max-height:70vh;border-radius:10px;border:1px solid var(--border);background:#000;"></video>
+
+    <div style="margin-top:28px;">
+      <a id="bookingDemoLink" href="#" class="btn btn-primary" target="_blank" rel="noopener">Попробовать демо в Telegram</a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ПРОЕКТ 02 ================= -->
+<section>
+  <div class="wrap project p2">
+    <div class="project-head">
+      <div>
+        <div class="project-tag">Проект 02</div>
+        <div class="project-industry">Ремонт мебели и локальные сервисные компании</div>
+      </div>
+      <span class="demo-badge">Демо-проект — показывает реальный рабочий подход</span>
+    </div>
+    <h2>ИИ-бот для сбора заявок на ремонт мебели</h2>
+    <p class="lede">Telegram-бот, который собирает информацию о повреждённой мебели, включая фото, и оформляет всё в запись Google Sheets, с которой владелец бизнеса может сразу работать.</p>
+
+    <div class="project-cols">
+      <div>
+        <h4>Проблема бизнеса</h4>
+        <p style="font-size:15px;">Мастерам по ремонту мебели нужна чёткая информация о повреждении, чтобы понять заявку, — но фото и описания, присланные в чат, могут теряться, и их сложно найти позже.</p>
+        <h4 style="margin-top:30px;">Решение</h4>
+        <p style="font-size:15px;">Telegram-бот задаёт клиенту нужные вопросы о мебели и повреждении, при необходимости собирает фото и автоматически сохраняет всё в строку Google Sheets — фото при этом попадает в отдельную папку и привязывается прямой ссылкой к записи.</p>
+        <h4 style="margin-top:30px;">Ключевые функции</h4>
+        <ul class="feature-list">
+          <li>Диалог с клиентом в Telegram</li>
+          <li>Структурированный сбор информации о мебели и повреждении</li>
+          <li>Автоматическое сохранение данных заявки в Google Sheets</li>
+          <li>Организация фото в отдельной папке</li>
+          <li>Ссылка на фото сохраняется в соответствующей строке таблицы</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Пошаговый процесс</h4>
+        <ul class="journey">
+          <li>Клиент начинает диалог в Telegram.</li>
+          <li>Бот собирает нужную информацию о заявке на ремонт.</li>
+          <li>Клиент присылает фото повреждённой мебели, когда сценарий это запрашивает.</li>
+          <li>Автоматизация сохраняет фото в отдельную папку.</li>
+          <li>В Google Sheets создаётся запись с деталями заявки и ссылкой на фото.</li>
+          <li>Владелец бизнеса просматривает заявку и открывает фото прямо из записи.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="diagram">
+      <h4>От чата до таблицы</h4>
+      <div class="flow-row">
+        <div class="flow-box">
+          <h5>Telegram</h5>
+          <div class="mini">Клиент описывает повреждение и присылает фото.</div>
+        </div>
+        <div class="cal-arrow" style="font-size:16px;">→</div>
+        <div class="flow-box">
+          <h5>Папка с фото</h5>
+          <div class="mini">Фото сохраняется в организованную папку, названную по заявке.</div>
+        </div>
+        <div class="cal-arrow" style="font-size:16px;">→</div>
+        <div class="flow-box" style="flex:1.3;">
+          <h5>Google Sheets</h5>
+          <div class="sheet-row"><span>Имя</span><span>Мебель</span><span>Фото</span></div>
+          <div class="sheet-row"><span>И. Карпенко</span><span>Дубовый стул, трещина в ножке</span><span class="link">Открыть фото →</span></div>
+        </div>
+      </div>
+      <div class="diagram-note">Иллюстративный макет потока данных — не реальная запись клиента.</div>
+    </div>
+
+    <h4 style="margin-top:56px;">Польза для бизнеса</h4>
+    <ul class="feature-list" style="max-width:640px;">
+      <li>Входящие заявки собраны в одном месте и систематизированы</li>
+      <li>Быстрый доступ к фото повреждений при оценке заказа</li>
+      <li>Меньше ручного переноса информации из чата в таблицу</li>
+      <li>Лучшая подготовка перед ответом на заявку на ремонт</li>
+    </ul>
+
+    <h4 style="margin-top:48px;">Переписка в Telegram — скриншоты</h4>
+    <div class="gallery">
+      <figure class="shot" style="aspect-ratio:auto;padding:0;margin:0;overflow:hidden;">
+        <img src="lead-telegram-1.jpg" alt="Бот спрашивает о повреждении" style="width:100%;display:block;border-radius:10px;">
+      </figure>
+      <figure class="shot" style="aspect-ratio:auto;padding:0;margin:0;overflow:hidden;">
+        <img src="lead-telegram-2.jpg" alt="Клиент присылает фото" style="width:100%;display:block;border-radius:10px;">
+      </figure>
+      <figure class="shot" style="aspect-ratio:auto;padding:0;margin:0;overflow:hidden;">
+        <img src="lead-telegram-3.jpg" alt="Сообщение-подтверждение" style="width:100%;display:block;border-radius:10px;">
+      </figure>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:40px;">
+      <div>
+        <h4>Запись в Google Sheets</h4>
+        <img src="lead-google-sheets.jpg" alt="Запись в Google Sheets" style="width:100%;border-radius:10px;border:1px solid var(--border);">
+      </div>
+      <div>
+        <h4>Папка с фото</h4>
+        <img src="lead-photo-folder.jpg" alt="Папка с фото" style="width:100%;border-radius:10px;border:1px solid var(--border);">
+      </div>
+    </div>
+
+    <h4 style="margin-top:36px;">Демо-видео</h4>
+    <video id="leadVideo" src="lead-demo.mp4" controls preload="metadata" style="display:block;margin:0 auto;width:auto;max-width:100%;max-height:70vh;border-radius:10px;border:1px solid var(--border);background:#000;"></video>
+
+    <div style="margin-top:28px;">
+      <a id="leadDemoLink" href="#" class="btn btn-teal" target="_blank" rel="noopener">Попробовать демо в Telegram</a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= СРАВНЕНИЕ ================= -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Сравнение</div>
+    <h2 style="font-size:clamp(22px,2.8vw,30px);">Сравнение двух проектов</h2>
+    <div class="compare-wrap">
+      <table class="compare-table">
+        <thead>
+          <tr><th>&nbsp;</th><th>Бот для записи на приём</th><th>Бот для сбора заявок</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Сфера применения</td><td>Салоны красоты и мастера маникюра</td><td>Ремонт мебели и локальные сервисы</td></tr>
+          <tr><td>Какую проблему решает</td><td>Ручная запись и проверка занятости</td><td>Разрозненные данные заявок и фото</td></tr>
+          <tr><td>Диалог в Telegram</td><td>Подводит клиента к доступному времени</td><td>Собирает структурированные данные заявки</td></tr>
+          <tr><td>Интеграции</td><td>Google Calendar</td><td>Google Sheets, папка для хранения фото</td></tr>
+          <tr><td>Какие данные обрабатывает</td><td>Запрошенное время, статус занятости</td><td>Тип мебели, детали повреждения, фото</td></tr>
+          <tr><td>Польза для бизнеса</td><td>Меньше переписки по записи, меньше пропущенных броней</td><td>Систематизированные записи, быстрее оценка заказа</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ================= УСЛУГИ ================= -->
+<section id="services">
+  <div class="wrap">
+    <div class="eyebrow">Что я могу автоматизировать</div>
+    <h2 style="font-size:clamp(22px,2.8vw,30px);max-width:600px;">Автоматизация, построенная под реальные процессы вашего бизнеса</h2>
+    <p class="lede">Конкретный функционал и интеграции зависят от задач каждого клиента — вот направления, в которых я обычно работаю.</p>
+    <div class="service-grid">
+      <div class="service-card"><div class="ic">💬</div><h3>ИИ-ассистенты в Telegram</h3><p>Диалоговые боты, которые понимают запрос клиента и отвечают естественно.</p></div>
+      <div class="service-card"><div class="ic">📋</div><h3>Боты для сбора заявок</h3><p>Структурированные диалоги, которые собирают из каждой заявки нужные бизнесу детали.</p></div>
+      <div class="service-card"><div class="ic">📅</div><h3>Сценарии записи на услуги</h3><p>Запись с учётом календаря, которая проверяет реальную занятость перед подтверждением времени.</p></div>
+      <div class="service-card"><div class="ic">🔔</div><h3>Автоматические уведомления</h3><p>Уведомления в нужное место в момент поступления новой заявки или записи.</p></div>
+      <div class="service-card"><div class="ic">🗂️</div><h3>Интеграции с Google Sheets</h3><p>Данные заявок и записей автоматически попадают в таблицу, которой вы уже пользуетесь.</p></div>
+      <div class="service-card"><div class="ic">🧭</div><h3>Управление заявками клиентов</h3><p>Чёткая, систематизированная запись каждой заявки вместо разрозненных чатов.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ПРОЦЕСС ================= -->
+<section id="process">
+  <div class="wrap">
+    <div class="eyebrow">Как я работаю</div>
+    <h2 style="font-size:clamp(22px,2.8vw,30px);">Простой процесс из пяти шагов</h2>
+    <div class="process-list">
+      <div class="process-item"><div class="process-num">01</div><div><h3>Исследование</h3><p>Разбираюсь в проблеме бизнеса — что сейчас происходит медленно, повторяется или теряется.</p></div></div>
+      <div class="process-item"><div class="process-num">02</div><div><h3>Планирование</h3><p>Определяю сценарий и функции, которые реально нужны для решения этой проблемы.</p></div></div>
+      <div class="process-item"><div class="process-num">03</div><div><h3>Разработка</h3><p>Пошагово создаю согласованную автоматизацию.</p></div></div>
+      <div class="process-item"><div class="process-num">04</div><div><h3>Тестирование</h3><p>Проверяю ключевые сценарии перед запуском.</p></div></div>
+      <div class="process-item"><div class="process-num">05</div><div><h3>Передача</h3><p>Передаю готовое решение вместе с инструкцией по использованию.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ЧТО ПОЛУЧАЕТ КЛИЕНТ ================= -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Что получает клиент</div>
+    <h2 style="font-size:clamp(22px,2.8vw,30px);max-width:600px;">Поставка по согласованному объёму работ</h2>
+    <div class="deliver-grid">
+      <ul class="feature-list">
+        <li>Настроенный Telegram-бот</li>
+        <li>Индивидуальный сценарий диалога с клиентом</li>
+        <li>Согласованный сценарий автоматизации</li>
+      </ul>
+      <ul class="feature-list">
+        <li>Необходимые интеграции</li>
+        <li>Тестирование согласованных сценариев</li>
+        <li>Документация по настройке и инструкция по передаче</li>
+      </ul>
+    </div>
+    <p style="margin-top:26px;font-size:14px;max-width:600px;">Хостинг, подписки, постоянная поддержка или неограниченные правки не включены, если это отдельно не согласовано в рамках проекта.</p>
+  </div>
+</section>
+
+<!-- ================= ВОПРОСЫ ================= -->
+<section id="faq">
+  <div class="wrap">
+    <div class="eyebrow">Вопросы</div>
+    <h2 style="font-size:clamp(22px,2.8vw,30px);">Часто задаваемые вопросы</h2>
+    <div class="faq" id="faqList">
+      <div class="faq-item">
+        <div class="faq-q">Какие Telegram-боты вы создаёте?<span class="x">+</span></div>
+        <div class="faq-a"><p>Диалоговые боты для обработки обращений, сбора заявок и записи на услуги — с нужными каждому бизнесу интеграциями.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Может ли бот проверять занятость в Google Calendar?<span class="x">+</span></div>
+        <div class="faq-a"><p>Да — бот может в реальном времени проверять подключённый Google Calendar и предлагать альтернативное время, если слот занят, как показано в Проекте 01.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Может ли бот собирать информацию и фото от клиента?<span class="x">+</span></div>
+        <div class="faq-a"><p>Да — бот может задавать структурированные вопросы и собирать фото прямо в диалоге, как показано в Проекте 02.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Можно ли сохранять заявки в Google Sheets?<span class="x">+</span></div>
+        <div class="faq-a"><p>Да, заявки можно автоматически оформлять в запись Google Sheets, включая ссылки на связанные фото.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Можно ли заказать индивидуальный сценарий?<span class="x">+</span></div>
+        <div class="faq-a"><p>Да — каждый проект начинается с этапа исследования, на котором сценарий выстраивается под конкретный бизнес.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Сколько занимает разработка?<span class="x">+</span></div>
+        <div class="faq-a"><p>Зависит от объёма и задействованных интеграций — сроки согласовываются после этапа планирования.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Сколько это стоит?<span class="x">+</span></div>
+        <div class="faq-a"><p>Стоимость зависит от объёма и интеграций. Напишите мне с деталями о вашем процессе, чтобы мы его обсудили вместе.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Какая поддержка доступна после сдачи проекта?<span class="x">+</span></div>
+        <div class="faq-a"><p>В комплект входят документация по настройке и инструкция по передаче. Постоянную поддержку можно согласовать отдельно при необходимости.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= КОНТАКТЫ ================= -->
+<section id="contact">
+  <div class="wrap contact">
+    <div class="eyebrow">Связаться со мной</div>
+    <h2>Давайте создадим автоматизацию для вашего бизнеса.</h2>
+    <p class="lede">Расскажите о своём текущем процессе — вместе определим, что можно автоматизировать.</p>
+    <div class="contact-ctas">
+      <a id="contactTelegram" href="#" class="btn btn-primary" target="_blank" rel="noopener">Написать в Telegram</a>
+      <button id="contactEmail" class="btn btn-ghost" onclick="copyEmail(this)"></button>
+    </div>
+    <div class="contact-meta" id="contactMeta"><!-- заполняется скриптом --></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">Специалист по ИИ-автоматизации — показанные выше проекты являются демонстрационными и не являются подтверждёнными кейсами клиентов.</div>
+</footer>
+
+<script>
+  // Копирование почты в буфер обмена (с запасным способом на случай,
+  // если Clipboard API недоступен в текущем окружении)
+  function showCopied(btn) {
+    btn.textContent = 'Скопировано';
+    btn.style.borderColor = 'var(--teal)';
+    btn.style.color = 'var(--teal)';
+    setTimeout(() => {
+      btn.textContent = SITE_CONFIG.email;
+      btn.style.borderColor = '';
+      btn.style.color = '';
+    }, 2000);
+  }
+  function fallbackCopy(text) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    try { document.execCommand('copy'); } catch (e) {}
+    document.body.removeChild(ta);
+  }
+  function copyEmail(btn) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(SITE_CONFIG.email).then(
+        () => showCopied(btn),
+        () => { fallbackCopy(SITE_CONFIG.email); showCopied(btn); }
+      );
+    } else {
+      fallbackCopy(SITE_CONFIG.email);
+      showCopied(btn);
+    }
+  }
+  document.getElementById('contactEmail').textContent = SITE_CONFIG.email;
+
+  // Подставляем ссылки из SITE_CONFIG (редактируется в начале <head>)
+  document.getElementById('bookingDemoLink').href = SITE_CONFIG.bookingBotDemoUrl;
+  document.getElementById('leadDemoLink').href = SITE_CONFIG.leadBotDemoUrl;
+  document.getElementById('contactTelegram').href = SITE_CONFIG.telegramUrl;
+  // contactEmail теперь кнопка-копирование (см. copyEmail выше)
+  document.getElementById('contactMeta').textContent = SITE_CONFIG.telegramHandle + '  ·  ' + SITE_CONFIG.email;
+
+  // Мобильное меню
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+
+  // Аккордеон FAQ
+  document.querySelectorAll('.faq-item').forEach(item => {
+    item.querySelector('.faq-q').addEventListener('click', () => {
+      const wasOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+      if (!wasOpen) item.classList.add('open');
+    });
+  });
+</script>
+<script>
+  // Лёгкое появление блоков при прокрутке
+  document.querySelectorAll('section:not(.hero) > .wrap').forEach(el => el.classList.add('reveal'));
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+</script>
+
+</body>
+</html>
